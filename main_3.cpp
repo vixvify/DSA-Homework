@@ -9,6 +9,7 @@ using namespace std;
 
 struct Data {
     vector<double> data;
+    string nick;
 };
 
 vector<Data> loadCSV(string filename) {
@@ -26,9 +27,13 @@ vector<Data> loadCSV(string filename) {
         string value;
         Data d;
 
-        while (getline(ss, value, ',')) {
+        for (int i = 0; i < 8; i++) {
+            getline(ss, value, ',');
             d.data.push_back(stod(value));
         }
+
+        getline(ss, d.nick);
+
         dataset.push_back(d);
     }
     return dataset;
@@ -124,12 +129,19 @@ vector<pair<double,int>> findknn(vector<Data>& dataset,vector<double>& query) {
 
 int main() {
     vector<Data> dataset = loadCSV("mbti.csv");
-    vector<double> query = {32.0,32.0,27.0,36.0,29.0,31.0,28.0,23.0};
+    vector<double> query = {24.8,33.0,30.0,39.0,27.0,35.0,31.0,28.0};
     vector<pair<double,int>> neighbors = findknn(dataset,query);
 
-   for (int i = 0; i < neighbors.size(); i++) {
-       cout << "weight = " << neighbors[i].first << " " << "index = " << neighbors[i].second << endl;
-   }
+    for (int i = 0; i < neighbors.size(); i++) {
+        int idx = neighbors[i].second;
+
+        cout << "#" << i+1
+             << " nearest : "
+             << dataset[idx].nick
+             << " distance = "
+             << neighbors[i].first
+             << endl;
+    }
     string newType = findNewType(dataset, neighbors);
     cout << newType << endl;
     return 0;
