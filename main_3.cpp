@@ -9,6 +9,7 @@ using namespace std;
 
 struct Data {
     vector<double> data;
+    string type;
     string nick;
 };
 
@@ -32,6 +33,7 @@ vector<Data> loadCSV(string filename) {
             d.data.push_back(stod(value));
         }
 
+        getline(ss, d.type, ',');
         getline(ss, d.nick);
 
         dataset.push_back(d);
@@ -48,27 +50,10 @@ double calculatequery(vector<double>& dataset,vector<double>& query) {
     return sqrt(sum);
 }
 
-string checkType (vector<double>& query) {
-    string type;
-    if (query[0] > query[1]) type = "E";
-    else type = "I";
-
-    if (query[2] > query[3]) type += "S";
-    else type += "N";
-
-    if (query[4] > query[5]) type += "T";
-    else type += "F";
-
-    if (query[6] > query[7]) type += "J";
-    else type += "P";
-
-    return type;
-}
-
 string findNewType(vector<Data>& dataset,vector<pair<double,int>> nearest) {
-    string t1 = checkType(dataset[nearest[0].second].data);
-    string t2 = checkType(dataset[nearest[1].second].data);
-    string t3 = checkType(dataset[nearest[2].second].data);
+    string t1 = dataset[nearest[0].second].type;
+    string t2 = dataset[nearest[1].second].type;
+    string t3 = dataset[nearest[2].second].type;
     string type;
 
     for (int i = 0; i < 4; i++) {
@@ -76,6 +61,8 @@ string findNewType(vector<Data>& dataset,vector<pair<double,int>> nearest) {
             type += t1[i];
         else if (t2[i] == t1[i] || t2[i] == t3[i])
             type += t2[i];
+        else
+            type += t1[i];
     }
     return type;
 }
