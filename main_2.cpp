@@ -143,9 +143,19 @@ int main() {
     addNode(4,2,&head2,&tail2);
     addNode(6,0,&head2,&tail2);
 
-    Node* result = multiplyPolynomial(&head1,&head2);
+    cout << "Polynomial 1: ";
+    printPolynomial(head1);
 
-    printPolynomial(result);
+    cout << "Polynomial 2: ";
+    printPolynomial(head2);
 
+    Node* sum = addPolynomial(&head1,&head2);
+    Node* product = multiplyPolynomial(&head1,&head2);
+
+    cout << "Addition: ";
+    printPolynomial(sum);
+
+    cout << "Multiplication: ";
+    printPolynomial(product);
     return 0;
 }
